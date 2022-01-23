@@ -8,16 +8,13 @@
 #include <string>
 #include <boost/json.hpp>
 
-namespace ServerModels {
+struct LoginResponseModel {
+    int idx;
+    std::string name;
+    std::string password;
+    bool is_observer;
+};
 
-    struct LoginResponseModel {
-        int idx;
-        std::string name;
-        std::string password;
-        bool is_observer;
-    };
-
-    LoginResponseModel tag_invoke(const boost::json::value_to_tag<LoginResponseModel>&, boost::json::value const& jv);
-}
+LoginResponseModel tag_invoke(const boost::json::value_to_tag<LoginResponseModel>&, boost::json::value const& jv);
 
 #endif //WOT_STRATEGY_LOGINRESPONSEMODEL_H

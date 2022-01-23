@@ -30,17 +30,17 @@ WotStrategyServer::WotStrategyServer(std::string host, std::string service) :
     TcpConnection(std::move(host), std::move(service)) {
 }
 
-ServerModels::LoginResponseModel WotStrategyServer::Login(ServerModels::LoginRequestModel &request) {
+LoginResponseModel WotStrategyServer::Login(LoginRequestModel &request) {
     SendAction(Action::LOGIN, serialize(boost::json::value_from(request)));
     auto tmp = RecvResult(lastResult);
     if (lastResult != Result::OKEY) {
         std::cerr << "RequestResult: " << (int)lastResult << '\n';
         std::cerr.write((char *)tmp.data(), tmp.size()).put('\n');
-        return ServerModels::LoginResponseModel();
+        return LoginResponseModel();
     }
     streamParser.reset();
     streamParser.write((char *) tmp.data(), tmp.size());
-    return boost::json::value_to<ServerModels::LoginResponseModel>(streamParser.release());
+    return boost::json::value_to<LoginResponseModel>(streamParser.release());
 }
 
 void WotStrategyServer::Logout() {

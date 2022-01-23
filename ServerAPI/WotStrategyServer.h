@@ -36,7 +36,7 @@ public:
 
     WotStrategyServer(std::string host, std::string service);
 
-    ServerModels::LoginResponseModel Login(ServerModels::LoginRequestModel &request);
+    LoginResponseModel Login(LoginRequestModel &request);
     void Logout();
 
     Result GetLastResult();

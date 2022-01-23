@@ -8,19 +8,16 @@
 #include <string>
 #include <boost/json.hpp>
 
-namespace ServerModels {
+struct LoginRequestModel {
+    std::string name;
+    std::string password;
+    std::string game;
+    int num_turns;
+    int num_players;
+    bool is_observer;
+};
 
-    struct LoginRequestModel {
-        std::string name;
-        std::string password;
-        std::string game;
-        int num_turns;
-        int num_players;
-        bool is_observer;
-    };
-
-    void tag_invoke(const boost::json::value_from_tag&, boost::json::value& jv, LoginRequestModel const &c);
-}
+void tag_invoke(const boost::json::value_from_tag&, boost::json::value& jv, LoginRequestModel const &c);
 
 
 #endif //WOT_STRATEGY_LOGINREQUESTMODEL_H

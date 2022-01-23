@@ -5,16 +5,19 @@
 
 int main(int argc, char* argv[]) {
     WotStrategyServer server("wgforge-srv.wargaming.net", "443");
-    ServerModels::LoginRequestModel request {
+    LoginRequestModel request {
         "name",
-        "password1",
-        "wasd",
+        "password",
+        "wasd1",
         32,
         1,
         false
     };
-    ServerModels::LoginResponseModel response = server.Login(request);
-    server.Logout();
-    std::cout << "IDX: " << response.idx << " Name: " << response.name << " Password: " << response.password << " IsObserver: " << response.is_observer<< '\n';
+    LoginResponseModel response = server.Login(request);
+    if (server.GetLastResult() == WotStrategyServer::Result::OKEY) {
+        server.Logout();
+        std::cout << "IDX: " << response.idx << " Name: " << response.name << " Password: " << response.password
+                  << " IsObserver: " << response.is_observer << '\n';
+    }
     return 0;
 }
