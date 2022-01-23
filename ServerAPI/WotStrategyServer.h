@@ -37,10 +37,13 @@ public:
     WotStrategyServer(std::string host, std::string service);
 
     ServerModels::LoginResponseModel Login(ServerModels::LoginRequestModel &request);
+    void Logout();
 
+    Result GetLastResult();
     void SendAction(Action action, std::string data);
-    void RecvResult();
+    boost::asio::mutable_buffer RecvResult(Result &result);
 private:
+    Result lastResult;
     std::vector<char> buffer;
     boost::json::stream_parser streamParser;
 };

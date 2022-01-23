@@ -12,8 +12,8 @@
 class TcpConnection {
 public:
     TcpConnection(std::string host, std::string service);
-    void Send(boost::asio::const_buffer buffer);
-    void Recieve(boost::asio::mutable_buffer buffer);
+    std::size_t Send(boost::asio::const_buffer buffer);
+    std::size_t Recieve(boost::asio::mutable_buffer buffer);
     ~TcpConnection();
 private:
     boost::system::error_code error;

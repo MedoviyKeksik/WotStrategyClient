@@ -7,14 +7,14 @@ int main(int argc, char* argv[]) {
     WotStrategyServer server("wgforge-srv.wargaming.net", "443");
     ServerModels::LoginRequestModel request {
         "name",
-        "password",
+        "password1",
         "wasd",
         32,
         1,
         false
     };
     ServerModels::LoginResponseModel response = server.Login(request);
+    server.Logout();
     std::cout << "IDX: " << response.idx << " Name: " << response.name << " Password: " << response.password << " IsObserver: " << response.is_observer<< '\n';
-    std::cout.flush();
     return 0;
 }

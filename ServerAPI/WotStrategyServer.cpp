@@ -4,6 +4,8 @@
 
 #include "WotStrategyServer.h"
 #include <boost/endian.hpp>
+#include <utility>
+#include <iostream>
 
 void WotStrategyServer::SendAction(WotStrategyServer::Action action, std::string data) {
     size_t szData = data.size();
@@ -14,21 +16,38 @@ void WotStrategyServer::SendAction(WotStrategyServer::Action action, std::string
     Send(boost::asio::const_buffer(&buffer[0], szData + 8));
 }
 
-void WotStrategyServer::RecvResult() {
+boost::asio::mutable_buffer WotStrategyServer::RecvResult(WotStrategyServer::Result &result) {
     Recieve(boost::asio::mutable_buffer(&buffer[0], 8));
+    result = *(Result *)(&buffer[0]);
     int szData = *(int *)(&buffer[4]);
     if (buffer.size() < szData + 8) buffer.resize(szData + 8);
-    Recieve(boost::asio::mutable_buffer(&buffer[8], szData));
+    boost::asio::mutable_buffer resultBuffer(&buffer[8], szData);
+    Recieve(resultBuffer);
+    return resultBuffer;
 }
 
-WotStrategyServer::WotStrategyServer(std::string host, std::string service) : TcpConnection(host, service) {
+WotStrategyServer::WotStrategyServer(std::string host, std::string service) :
+    TcpConnection(std::move(host), std::move(service)) {
 }
 
 ServerModels::LoginResponseModel WotStrategyServer::Login(ServerModels::LoginRequestModel &request) {
     SendAction(Action::LOGIN, serialize(boost::json::value_from(request)));
-    RecvResult();
+    auto tmp = RecvResult(lastResult);
+    if (lastResult != Result::OKEY) {
+        std::cerr << "RequestResult: " << (int)lastResult << '\n';
+        std::cerr.write((char *)tmp.data(), tmp.size()).put('\n');
+        return ServerModels::LoginResponseModel();
+    }
     streamParser.reset();
-    int szData = *(int *)(&buffer[4]);
-    streamParser.write(&buffer[8], szData);
+    streamParser.write((char *) tmp.data(), tmp.size());
     return boost::json::value_to<ServerModels::LoginResponseModel>(streamParser.release());
 }
+
+void WotStrategyServer::Logout() {
+    SendAction(Action::LOGOUT, "");
+}
+
+WotStrategyServer::Result WotStrategyServer::GetLastResult() {
+    return lastResult;
+}
+

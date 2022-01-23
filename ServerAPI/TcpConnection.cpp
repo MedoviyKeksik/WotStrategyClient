@@ -12,12 +12,12 @@ TcpConnection::TcpConnection(std::string host, std::string service) : ioService(
     boost::asio::connect(socket, results, error);
 }
 
-void TcpConnection::Send(boost::asio::const_buffer buffer) {
-    std::size_t total = socket.send(buffer, 0, error);
+std::size_t TcpConnection::Send(boost::asio::const_buffer buffer) {
+    return socket.send(buffer, 0, error);
 }
 
-void TcpConnection::Recieve(boost::asio::mutable_buffer buffer) {
-    std::size_t total = socket.receive(buffer, 0, error);
+std::size_t TcpConnection::Recieve(boost::asio::mutable_buffer buffer) {
+    return socket.receive(buffer, 0, error);
 }
 
 TcpConnection::~TcpConnection() {
