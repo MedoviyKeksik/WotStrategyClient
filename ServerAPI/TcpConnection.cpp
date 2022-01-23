@@ -21,6 +21,8 @@ void TcpConnection::Recieve(boost::asio::mutable_buffer buffer) {
 }
 
 TcpConnection::~TcpConnection() {
+    socket.cancel();
+    socket.close();
 }
 
 

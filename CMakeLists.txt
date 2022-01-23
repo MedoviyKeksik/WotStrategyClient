@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 11)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-add_executable(WOT_strategy main.cpp ServerAPI/WotStrategyServer.cpp ServerAPI/WotStrategyServer.h ServerAPI/TcpConnection.cpp ServerAPI/TcpConnection.h)
+add_executable(WOT_strategy main.cpp ServerAPI/WotStrategyServer.cpp ServerAPI/WotStrategyServer.h ServerAPI/TcpConnection.cpp ServerAPI/TcpConnection.h ServerAPI/Models/LoginRequestModel.h ServerAPI/Models/LoginResponseModel.h ServerAPI/Models/LoginRequestModel.cpp ServerAPI/Models/LoginResponceModel.cpp)
 target_link_libraries(WOT_strategy ${CONAN_LIBS})

@@ -6,7 +6,10 @@
 #define WOT_STRATEGY_WOTSTRATEGYSERVER_H
 
 #include <vector>
+#include <boost/json.hpp>
 #include "TcpConnection.h"
+#include "Models/LoginRequestModel.h"
+#include "Models/LoginResponseModel.h"
 
 class WotStrategyServer : public TcpConnection {
 public:
@@ -33,11 +36,13 @@ public:
 
     WotStrategyServer(std::string host, std::string service);
 
+    ServerModels::LoginResponseModel Login(ServerModels::LoginRequestModel &request);
+
     void SendAction(Action action, std::string data);
     void RecvResult();
 private:
     std::vector<char> buffer;
+    boost::json::stream_parser streamParser;
 };
-
 
 #endif //WOT_STRATEGY_WOTSTRATEGYSERVER_H
